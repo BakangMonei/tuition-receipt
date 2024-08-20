@@ -1,8 +1,11 @@
-import { initializeApp } from 'firebase/app';
-import { getAnalytics, isSupported } from 'firebase/analytics';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth"; // Add Auth
+import { collection, getFirestore } from "firebase/firestore"; // Add Firestore
+import { getDatabase } from "firebase/database"; // Add Realtime Database
+import { getStorage } from "firebase/storage"; // Add Storage
+import { query, where, getDocs } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -15,17 +18,15 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+const analytics = getAnalytics(firebaseApp);
 
-let analytics;
-isSupported().then((supported) => {
-  if (supported) {
-    analytics = getAnalytics(app);
-  }
-});
+// Initialize Firebase services
+const auth = getAuth(firebaseApp); // Initialize Auth 
+const firestore = getFirestore(firebaseApp); // Initialize Firestore
+const database = getDatabase(firebaseApp); // Initialize Realtime Database
+const storage = getStorage(firebaseApp); // Initialize Storage
 
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
 
-export { app, analytics, auth, db, storage };
+export { auth, firestore, database, storage, firebaseApp };
