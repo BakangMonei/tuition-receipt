@@ -23,15 +23,6 @@ export const LoginScreen = ({ showPasswordToggle, showPassword }) => {
   const navigate = useNavigate();
   const db = getFirestore();
 
-  const [isCaptchaVerified, setCaptchaVerified] = useState(false);
-  const verifyCaptcha = () => {
-    setCaptchaVerified(true);
-  };
-
-  const resetCaptcha = () => {
-    setCaptchaVerified(false);
-  };
-
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -75,11 +66,6 @@ export const LoginScreen = ({ showPasswordToggle, showPassword }) => {
   return (
     <div className="bg_image flex items-center justify-center min-h-screen ">
       <div className="login_container p-8 rounded-xl shadow-md w-full max-w-md">
-        {/* <h1 className="text-4xl font-sans mb-1 text-center">Log In</h1> */}
-        
-
-        
-
         <div className="my-4 flex items-center before:mt-0.5 before:flex-1 before:border-t before:border-neutral-500 after:mt-0.5 after:flex-1 after:border-t after:border-neutral-500">
           <p className="mx-4 mb-0 text-2xl text-center font-semibold text-gray-500 dark:text-white">
             AreyengSghela
@@ -93,7 +79,7 @@ export const LoginScreen = ({ showPasswordToggle, showPassword }) => {
             <input
               type="email"
               placeholder="Email"
-              className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+              className="bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -111,7 +97,7 @@ export const LoginScreen = ({ showPasswordToggle, showPassword }) => {
             </label>
             <input
               placeholder="Password"
-              className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+              className="bg-transparent w-full font-open-sans font-bold px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
               id="pass"
               type={showPasswordToggle ? "text" : "password"}
               value={password}
