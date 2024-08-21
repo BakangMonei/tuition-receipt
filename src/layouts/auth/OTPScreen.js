@@ -52,4 +52,4 @@ const OTPScreen = () => {
       </div>
     </div>
   );
-}
+};
