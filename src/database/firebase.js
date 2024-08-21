@@ -2,9 +2,16 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth"; // Add Auth
-import { collection, getFirestore, query, where, getDocs  } from "firebase/firestore"; // Add Firestore
+import {
+  collection,
+  getFirestore,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore"; // Add Firestore
 import { getDatabase } from "firebase/database"; // Add Realtime Database
 import { getStorage } from "firebase/storage"; // Add Storage
+
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -14,14 +21,14 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_APP_ID,
-  measurementId: process.env.REACT_APP_MEASUREMENT_ID
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
 
 // Initialize Firebase services
-const auth = getAuth(firebaseApp); // Initialize Auth 
+const auth = getAuth(firebaseApp); // Initialize Auth
 const firestore = getFirestore(firebaseApp); // Initialize Firestore
 const database = getDatabase(firebaseApp); // Initialize Realtime Database
 const storage = getStorage(firebaseApp); // Initialize Storage
