@@ -18,28 +18,28 @@ function App() {
   return (
     <Router>
       <Switch>
-        // <Route path="/LoginPage" component={LoginPage} />
-        // <PrivateRoute
-        //   path="/AdminDashboard"
-        //   component={AdminDashboard}
-        //   authenticated={authenticated}
-        // />
-        // <PrivateRoute
-        //   path="/UserDashboard"
-        //   component={UserDashboard}
-        //   authenticated={authenticated}
-        // />
-        // <PrivateRoute
-        //   path="/SuperAdminDashboard"
-        //   component={SuperAdminDashboard}
-        //   authenticated={authenticated}
-        // />
+        <Route path="/LoginPage" component={LoginPage} />
+        <PrivateRoute
+          path="/AdminDashboard"
+          component={AdminDashboard}
+          authenticated={authenticated}
+        />
+        <PrivateRoute
+          path="/UserDashboard"
+          component={UserDashboard}
+          authenticated={authenticated}
+        />
+        <PrivateRoute
+          path="/SuperAdminDashboard"
+          component={SuperAdminDashboard}
+          authenticated={authenticated}
+        />
 
-        // <PrivateRoute
-        //   path="/ForgotPassword"
-        //   component={ForgotPassword}
-        //   authenticated={authenticated}
-        // />
+        <PrivateRoute
+          path="/ForgotPassword"
+          component={ForgotPassword}
+          authenticated={authenticated}
+        />
       </Switch>
     </Router>
   );
