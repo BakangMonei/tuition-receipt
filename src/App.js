@@ -31,6 +31,8 @@ const PrivateRoute = ({ element, path }) => {
   return isAuthenticated() ? element : <Navigate to="/LoginPage" />;
 };
 
+
+
 function App() {
   return (
     <Provider store={store}>

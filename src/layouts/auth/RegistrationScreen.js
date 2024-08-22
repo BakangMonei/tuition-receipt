@@ -18,22 +18,14 @@ export const RegistrationScreen = () => {
   const [lastname, setLastame] = useState("");
   const [phonenumber, setPhonenumber] = useState("");
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [sport, setSport] = useState("");
+  const [level, setLevel] = useState("");
   const [gender, setGender] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repassword, setRePassword] = useState("");
+  const [terms, setTerms] = useState("");
   const [error, setError] = useState(null);
-
-  const [isCaptchaVerified, setCaptchaVerified] = useState(false);
-  const verifyCaptcha = () => {
-    setCaptchaVerified(true);
-  };
-
-  const resetCaptcha = () => {
-    setCaptchaVerified(false);
-  };
 
   const dispatch = useDispatch();
   const registrationState = useSelector((state) => state.auth); // Assuming you have combined your reducers and authReducer is part of the state
@@ -42,7 +34,7 @@ export const RegistrationScreen = () => {
   const countryOptions = Object.values(countries);
 
   // Lists
-  const sports = ["Football", "Basketball", "Tennis", "Swimming", "Golf"];
+  const levels = ["Undergraduate", "Graduate", "Postgraduate"];
   const genderM = ["Male", "Female", "Other"];
   // State for validation and registration success
   const [validationError, setValidationError] = useState(false);
@@ -78,13 +70,6 @@ export const RegistrationScreen = () => {
 
     // Check if any required field is empty
     const passwordError = validatePassword(password, repassword);
-
-    // Check if captcha has been verified
-    // if (!isCaptchaVerified) {
-    //   alert(`Verify you're human`);
-    //   return;
-    // }
-
     if (passwordError.error) {
       setValidationError(true);
       setError(passwordError.message);
@@ -99,10 +84,11 @@ export const RegistrationScreen = () => {
       password,
       repassword,
       username,
-      sport,
+      level,
       selectedCountry,
       phonenumber,
       gender,
+      terms,
     ];
 
     if (requiredFields.some((field) => field.trim() === "")) {
@@ -139,7 +125,7 @@ export const RegistrationScreen = () => {
         email,
         username,
         gender,
-        sport,
+        level,
         selectedCountry,
         phonenumber,
         password,
@@ -198,7 +184,7 @@ export const RegistrationScreen = () => {
                 <input
                   type="text"
                   placeholder="FirstName"
-                  className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+                  className="bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
                   value={firstname}
                   onChange={(e) => setFirstname(e.target.value)}
                 />
@@ -208,7 +194,7 @@ export const RegistrationScreen = () => {
                 <input
                   type="text"
                   placeholder="LastName"
-                  className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+                  className="bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
                   value={lastname}
                   onChange={(e) => setLastame(e.target.value)}
                 />
@@ -220,22 +206,22 @@ export const RegistrationScreen = () => {
                 <input
                   type="text"
                   placeholder="Phone Number"
-                  className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+                  className="bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
                   value={phonenumber}
                   onChange={(e) => setPhonenumber(e.target.value)}
                 />
               </div>
               <div>
-                <label className="block text-sm font-thin mb-1">Sport</label>
+                <label className="block text-sm font-thin mb-1">Level</label>
                 <select
-                  className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
-                  value={sport}
-                  onChange={(e) => setSport(e.target.value)}
+                  className="bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+                  value={level}
+                  onChange={(e) => setLevel(e.target.value)}
                 >
-                  <option value="">Select Sport</option>
-                  {sports.map((sport, index) => (
-                    <option key={index} value={sport}>
-                      {sport}
+                  <option value="">Select Level</option>
+                  {levels.map((level, index) => (
+                    <option key={index} value={level}>
+                      {level}
                     </option>
                   ))}
                 </select>
@@ -243,7 +229,7 @@ export const RegistrationScreen = () => {
               <div>
                 <label className="block text-sm font-thin mb-1">Gender</label>
                 <select
-                  className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+                  className="bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
                 >
@@ -258,7 +244,7 @@ export const RegistrationScreen = () => {
               <div>
                 <label className="block text-sm font-thin mb-1">Country</label>
                 <select
-                  className=" bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+                  className=" bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
                   value={selectedCountry}
                   onChange={(e) => setSelectedCountry(e.target.value)}
                 >
@@ -275,7 +261,7 @@ export const RegistrationScreen = () => {
                 <input
                   type="email"
                   placeholder="Email"
-                  className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+                  className="bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -285,7 +271,7 @@ export const RegistrationScreen = () => {
                 <input
                   type="text"
                   placeholder="Username"
-                  className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+                  className="bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
@@ -295,7 +281,7 @@ export const RegistrationScreen = () => {
                 <input
                   type="password"
                   placeholder="Password"
-                  className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+                  className="bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -307,7 +293,7 @@ export const RegistrationScreen = () => {
                 <input
                   type="password"
                   placeholder="Confirm Password"
-                  className="bg-transparent w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
+                  className="bg-transparent font-open-sans font-bold w-full px-3 py-2 border rounded-md focus:ring focus:ring-blue-300"
                   value={repassword}
                   onChange={(e) => setRePassword(e.target.value)}
                 />
