@@ -1,5 +1,12 @@
 {
   "projects": {
     "default": "receipts-for-tuition"
-  }
+  },
+  "targets": {},
+  "etags": {
+    "receipts-for-tuition": {
+      "extensionInstances": {}
+    }
+  },
+  "dataconnectEmulatorConfig": {}
 }
