@@ -10,18 +10,62 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
-
-import googleImage from "../../assets/images/google_image.png";
-import facebookImage from "../../assets/images/facebook_image.png";
-import { auth } from "../../database/firebase";
+import OptionPopover from "./OptionPopover";
+import OTPPopover from "./OTPPopover";
+import { httpsCallable } from "firebase/functions";
+import { auth, functions } from "../../database/firebase"; // <-- Import functions here
 import CheckBox from "../../components/Checkbox/CheckBox";
 
 export const LoginScreen = ({ showPasswordToggle, showPassword }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+
+  const [showOptionPopover, setShowOptionPopover] = useState(false);
+  const [showOTPPopover, setShowOTPPopover] = useState(false);
+  const [otpMethod, setOtpMethod] = useState(null);
+
+  const [selectedOption, setSelectedOption] = useState(null);
+
   const navigate = useNavigate();
   const db = getFirestore();
+
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+
+  //   if (!email || !password) {
+  //     setError("Email and password are required.");
+  //     return;
+  //   }
+  //   try {
+  //     const userSnapshot = await getDocs(
+  //       query(collection(db, "users"), where("email", "==", email))
+  //     );
+  //     const adminSnapshot = await getDocs(
+  //       query(collection(db, "admin"), where("email", "==", email))
+  //     );
+  //     const s_adminSnapshot = await getDocs(
+  //       query(collection(db, "s_admin"), where("email", "==", email))
+  //     );
+
+  //     if (userSnapshot.size > 0) {
+  //       await signInWithEmailAndPassword(auth, email, password);
+  //       navigate("/UserDashboard");
+  //     } else if (adminSnapshot.size > 0) {
+  //       await signInWithEmailAndPassword(auth, email, password);
+  //       navigate("/AdminDashboard");
+  //     } else if (s_adminSnapshot.size > 0) {
+  //       await signInWithEmailAndPassword(auth, email, password);
+  //       navigate("/SuperAdminDashboard");
+  //       console.log("Successfully Logged in As Super Admin " + email);
+  //     } else {
+  //       setError("Invalid email or password.");
+  //     }
+  //   } catch (error) {
+  //     setError(error.message);
+  //     console.error("Login error:", error);
+  //   }
+  // };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -30,6 +74,7 @@ export const LoginScreen = ({ showPasswordToggle, showPassword }) => {
       setError("Email and password are required.");
       return;
     }
+
     try {
       const userSnapshot = await getDocs(
         query(collection(db, "users"), where("email", "==", email))
@@ -41,19 +86,13 @@ export const LoginScreen = ({ showPasswordToggle, showPassword }) => {
         query(collection(db, "s_admin"), where("email", "==", email))
       );
 
-      if (userSnapshot.size > 0) {
-        // User exists in the 'user' collection
+      if (
+        userSnapshot.size > 0 ||
+        adminSnapshot.size > 0 ||
+        s_adminSnapshot.size > 0
+      ) {
         await signInWithEmailAndPassword(auth, email, password);
-        navigate("/UserDashboard");
-      } else if (adminSnapshot.size > 0) {
-        // User exists in the 'admin' collection
-        await signInWithEmailAndPassword(auth, email, password);
-        navigate("/AdminDashboard");
-      } else if (s_adminSnapshot.size > 0) {
-        // User exists in the 's_admin' collection
-        await signInWithEmailAndPassword(auth, email, password);
-        navigate("/SuperAdminDashboard");
-        console.log("Successfully Logged in As Super Admin " + email);
+        setShowOptionPopover(true);
       } else {
         setError("Invalid email or password.");
       }
@@ -61,6 +100,41 @@ export const LoginScreen = ({ showPasswordToggle, showPassword }) => {
       setError(error.message);
       console.error("Login error:", error);
     }
+  };
+
+  const handleOtpMethodSelection = async (method) => {
+    setSelectedOption(method);
+
+    // Get the user's email or phone number from Firestore
+    const userSnapshot = await getDocs(
+      query(collection(db, "users"), where("email", "==", email))
+    );
+    const userData = userSnapshot.docs[0]?.data();
+
+    const sendOTP = httpsCallable(functions, "sendOTP");
+    try {
+      const response = await sendOTP({
+        email: method === "email" ? userData.email : null,
+        phoneNumber: method === "phone" ? userData.phoneNumber : null,
+      });
+
+      if (response.data.success) {
+        setOtpMethod(method);
+        // setShowOTPPopover(true);
+        setShowOTPPopover(true);
+      } else {
+        setError("Failed to send OTP. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+      setError("An error occurred while sending the OTP.");
+    }
+  };
+
+  const handleOtpSubmit = (otp) => {
+    // Logic to verify OTP
+    console.log(`OTP ${otp} submitted for method ${otpMethod}`);
+    navigate("/UserDashboard"); // Example navigation
   };
 
   return (
@@ -122,6 +196,19 @@ export const LoginScreen = ({ showPasswordToggle, showPassword }) => {
             Log in
           </button>
         </form>
+        {showOptionPopover && (
+          <OptionPopover
+            onSelectOption={handleOtpMethodSelection}
+            onClose={() => setShowOptionPopover(false)}
+          />
+        )}
+
+        {showOTPPopover && (
+          <OTPPopover
+            onSubmit={handleOtpSubmit}
+            onClose={() => setShowOTPPopover(false)}
+          />
+        )}
         <h1 className="text-start font-thin mb-4">
           Don’t have an account?{" "}
           <a href="/RegistrationPage" className="text-black underline">

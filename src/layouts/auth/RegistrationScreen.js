@@ -24,7 +24,6 @@ export const RegistrationScreen = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repassword, setRePassword] = useState("");
-  const [terms, setTerms] = useState("");
   const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
@@ -88,7 +87,6 @@ export const RegistrationScreen = () => {
       selectedCountry,
       phonenumber,
       gender,
-      terms,
     ];
 
     if (requiredFields.some((field) => field.trim() === "")) {

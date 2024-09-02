@@ -1,17 +1,10 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth"; // Add Auth
-import {
-  collection,
-  getFirestore,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore"; // Add Firestore
+import { getFirestore } from "firebase/firestore"; // Add Firestore
+import { getFunctions } from "firebase/functions"; // Add Functions
 import { getDatabase } from "firebase/database"; // Add Realtime Database
 import { getStorage } from "firebase/storage"; // Add Storage
-
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -32,8 +25,9 @@ const firebaseApp = initializeApp(firebaseConfig);
 // Initialize Firebase services
 const auth = getAuth(firebaseApp); // Initialize Auth
 const firestore = getFirestore(firebaseApp); // Initialize Firestore
+const functions = getFunctions(firebaseApp); // Initialize Functions
 const database = getDatabase(firebaseApp); // Initialize Realtime Database
 const storage = getStorage(firebaseApp); // Initialize Storage
 const analytics = getAnalytics(firebaseApp); // Initialize Analytics
 
-export { auth, firestore, database, storage, analytics, firebaseApp };
+export { auth, firestore, functions, database, storage, analytics, firebaseApp };
